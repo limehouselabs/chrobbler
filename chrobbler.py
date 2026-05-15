@@ -118,8 +118,12 @@ def main():
             time.sleep(RETRY_INTERVAL)
             continue
 
-        chromecast = chromecasts[0]
-        chromecast.wait(timeout=10)
+        try:
+            chromecast = chromecasts[0]
+            chromecast.wait(timeout=10)
+        except pychromecast.error.RequestTimeout as e:
+            logging.error("Timed out connecting to chromecast")
+            continue
 
         logging.info("Connected to %s", chromecast.name)
 
